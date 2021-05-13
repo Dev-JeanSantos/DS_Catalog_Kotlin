@@ -67,5 +67,21 @@ class CategoryController (@Inject val categoryRepository: CategoryRepository) {
         ))
     }
 
+    @Delete("/{id}")
+    @Transactional
+    fun delete(@PathVariable id: Long) : HttpResponse<Any>{
+
+        val possivelCategory = categoryRepository.findById(id)
+
+        if (possivelCategory.isEmpty) {
+            return HttpResponse.notFound("Category not found")
+        }
+
+        val category = possivelCategory.get()
+        categoryRepository.delete(category)
+
+        return HttpResponse.ok()
+    }
+
 
 }
