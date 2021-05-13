@@ -1,8 +1,8 @@
 package br.com.fourtk.category
 
-class CategoryResponse(category: Category) {
+import io.micronaut.core.annotation.Introspected
 
-    val name = category.name
-    val idCategory = category.id
-
-}
+@Introspected
+class CategoryResponse(
+    val name: String
+)

@@ -1,10 +1,7 @@
 package br.com.fourtk.category
 
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.*
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.validation.Validated
 import javax.inject.Inject
@@ -30,11 +27,26 @@ class CategoryController (@Inject val categoryRepository: CategoryRepository) {
     }
 
     @Get
-    fun findAll(): HttpResponse<List<CategoryResponse>>{
-        val categories = categoryRepository.findAll()
-        val response = categories.map {
-                category -> CategoryResponse(category)
+    @Transactional
+    fun findAllByName(@QueryValue(defaultValue = "") name: String): HttpResponse<Any> {
+
+        if(name.isBlank()){
+            val categories = categoryRepository.findAll()
+            val resposta = categories.map { category -> CategoryResponse(
+               category.name
+            ) }
+            return HttpResponse.ok(resposta)
         }
-        return HttpResponse.ok(response)
+
+        //Outra Opção com Queries do Hibernate
+        val possibleCategory = categoryRepository.findByNam(name)
+        if(possibleCategory.isEmpty){
+            return HttpResponse.notFound("Author not found")
+        }
+
+        val category = possibleCategory.get()
+        return HttpResponse.ok(CategoryResponse(
+            category.name
+        ))
     }
 }
