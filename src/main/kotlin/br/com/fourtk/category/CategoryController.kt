@@ -4,6 +4,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.validation.Validated
+import java.util.*
 import javax.inject.Inject
 import javax.transaction.Transactional
 import javax.validation.Valid
@@ -41,7 +42,7 @@ class CategoryController (@Inject val categoryRepository: CategoryRepository) {
         //Outra Opção com Queries do Hibernate
         val possibleCategory = categoryRepository.findByNam(name)
         if(possibleCategory.isEmpty){
-            return HttpResponse.notFound("Author not found")
+            return HttpResponse.notFound("Category not found")
         }
 
         val category = possibleCategory.get()
@@ -49,4 +50,22 @@ class CategoryController (@Inject val categoryRepository: CategoryRepository) {
             category.name
         ))
     }
+
+    @Put("/{id}")
+    @Transactional
+    fun update(@PathVariable id: Long, name: String) : HttpResponse<Any>{
+
+        val possibleCategory : Optional<Category> = categoryRepository.findById(id)
+
+        if (possibleCategory.isEmpty) {
+            return HttpResponse.notFound("Category not found")
+        }
+        val category = possibleCategory.get()
+        category.name = name
+        return HttpResponse.ok(CategoryResponse(
+            category.name
+        ))
+    }
+
+
 }
