@@ -1,6 +1,5 @@
 package br.com.fourtk.category
 
-import br.com.fourtk.product.ProductResponse
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -19,6 +18,8 @@ class CategoryController (@Inject val categoryRepository: CategoryRepository) {
     @Post
     @Transactional
     fun insert(@Body @Valid request: NewCategoryRequest): HttpResponse<Any> {
+
+        if(categoryRepository.existsByName(request.name)) return HttpResponse.badRequest("Category already exists")
 
         val category = request.newCategory()
         categoryRepository.save(category)

@@ -18,9 +18,8 @@ class ProductController (
     @Post
     @Transactional
     fun insert(@Body @Valid request: NewProductRequest): HttpResponse<Any>{
-        println("DTO => $request")
+
         val product = request.newProduct(categoryRepository)
-        println("Classe => ${product.name}")
 
         productRepository.save(product)
 

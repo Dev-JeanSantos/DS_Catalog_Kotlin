@@ -9,6 +9,7 @@ data class NewCategoryRequest(
 ) {
 
     fun newCategory(): Category {
+
         return Category(name)
     }
 
