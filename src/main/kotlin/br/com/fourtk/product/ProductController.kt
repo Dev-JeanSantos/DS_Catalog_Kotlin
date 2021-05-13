@@ -17,7 +17,7 @@ class ProductController (@Inject val productRepository: ProductRepository) {
     fun insert(@Body @Valid request: NewProductRequest): HttpResponse<Any>{
         println("DTO => $request")
         val product = request.newProduct()
-        println("Classe => ${product}")
+        println("Classe => ${product.name}")
 
         productRepository.save(product)
 
