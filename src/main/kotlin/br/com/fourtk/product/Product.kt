@@ -1,16 +1,18 @@
 package br.com.fourtk.product
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import br.com.fourtk.category.Category
+import io.micronaut.core.annotation.Introspected
+import javax.persistence.*
 
+@Introspected
 @Entity
 class Product(
     var name: String,
     var description: String,
     var price: Double,
-    var imgUrl: String
-) {
+    var imgUrl: String,
+    @OneToOne val category: Category
+    ) {
     @Id
     @GeneratedValue
     var id: Long? = null

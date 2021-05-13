@@ -25,20 +25,15 @@ class CategoryController (@Inject val categoryRepository: CategoryRepository) {
 
         val uri = UriBuilder.of("/categories/{id}")
             .expand(mutableMapOf(Pair("id", category.id)))
-
         return HttpResponse.created(uri)
-
     }
 
     @Get
     fun findAll(): HttpResponse<List<CategoryResponse>>{
-
         val categories = categoryRepository.findAll()
-
         val response = categories.map {
                 category -> CategoryResponse(category)
         }
-
         return HttpResponse.ok(response)
     }
 }

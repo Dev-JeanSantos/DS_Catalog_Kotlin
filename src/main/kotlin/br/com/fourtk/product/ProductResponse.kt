@@ -4,4 +4,5 @@ class ProductResponse(product: Product) {
     val name = product.name
     val description = product.description
     val price = product.price
+    val Category = product.category.name
 }
