@@ -5,6 +5,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.validation.Validated
+import java.util.*
 import javax.transaction.Transactional
 import javax.validation.Valid
 
@@ -25,17 +26,6 @@ class ProductController (
             .expand(mutableMapOf(Pair("id", product.id)))
         return HttpResponse.created(uri)
     }
-
-//    @Get
-//    fun findAll(): HttpResponse<List<ProductResponse>>{
-//
-//        val products = productRepository.findAll()
-//        val response = products.map {
-//            product -> ProductResponse(product)
-//        }
-//        return HttpResponse.ok(response)
-//    }
-
     @Get
     @Transactional
     fun findAllByName(@QueryValue(defaultValue = "") name: String): HttpResponse<Any> {
@@ -44,8 +34,9 @@ class ProductController (
             val resposta = products.map { product -> ProductResponse(
                 product.name,
                 product.description,
+                product.price,
                 product.imgUrl,
-                product.category
+                product.category.name
             ) }
             return HttpResponse.ok(resposta)
         }
@@ -57,9 +48,35 @@ class ProductController (
 
         val product = possibleProduct.get()
         return HttpResponse.ok(
-            ProductResponse(product.name,product.description, product.imgUrl, product.category)
+            ProductResponse(product.name,product.description, product.price, product.imgUrl,  product.category.name)
         )
     }
+    @Put("/{id}")
+        @Transactional
+        fun update(
+            @PathVariable id: Long,
+            name: String,
+            description: String,
+            price: Double,
+            imgUrl: String
+        ) : HttpResponse<Any>{
+
+            val possibleProduct : Optional<Product> = productRepository.findById(id)
+
+            if (possibleProduct.isEmpty) {
+                return HttpResponse.notFound("Product not found")
+            }
+            val product = possibleProduct.get()
+            product.name = name
+            product.description = description
+            product.price = price
+            product.imgUrl = imgUrl
+            return HttpResponse.ok(
+                ProductResponse(
+                product.name, product.description,product.price,product.imgUrl, product.category.name
+            )
+            )
+        }
 
 
 

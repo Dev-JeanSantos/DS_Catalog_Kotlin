@@ -14,4 +14,10 @@ class Category(
     @Id
     @GeneratedValue
     var id: Long? = null
+
+    override fun toString(): String {
+        return "Category(name='$name')"
+    }
+
+
 }

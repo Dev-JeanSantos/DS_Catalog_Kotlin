@@ -11,10 +11,10 @@ data class NewProductRequest (
     @field:NotBlank val name: String,
     @field:NotBlank val description: String,
     @field:NotNull val price: Double,
-    @field:NotNull val idCategory: Long,
-    val imgUrl: String
+    @field:NotBlank val imgUrl: String,
+    @field:NotNull val idCategory: Long
 
-        ) {
+) {
 
     fun newProduct(categoryRepository: CategoryRepository): Product {
         val category = categoryRepository.findById(idCategory)
