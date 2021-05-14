@@ -71,13 +71,13 @@ class CategoryController (@Inject val categoryRepository: CategoryRepository) {
     @Transactional
     fun delete(@PathVariable id: Long) : HttpResponse<Any>{
 
-        val possivelCategory = categoryRepository.findById(id)
+        val possibleCategory = categoryRepository.findById(id)
 
-        if (possivelCategory.isEmpty) {
+        if (possibleCategory.isEmpty) {
             return HttpResponse.notFound("Category not found")
         }
 
-        val category = possivelCategory.get()
+        val category = possibleCategory.get()
         categoryRepository.delete(category)
 
         return HttpResponse.ok()
